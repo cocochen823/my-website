@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日快樂</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.3.2"></script>
+    <link rel="icon" type="image/png" href="imagesbd/favicon.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body style="background-color: rgb(205, 171, 238);">
+    <script>
+        function launchConfetti() {
+            var duration = 2 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: {
+                        x: 0
+                    }
+                });
+
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: {
+                        x: 1
+                    }
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            })();
+        }
+        window.onload = launchConfetti;
+    </script>
+    <div class="container">
+        <h1>HAPPY BIRTHDAY MOM!!!!</h1>
+        <h1>生日快樂 媽媽!!!!</h1>
+        <div class="love-text">
+            I Love You 💖
+        </div><br><br>
+        <div class="love-text">
+            我愛你
+        </div>
+        <br><br>
+        <p>這個網站是你的生日禮物, 我花了很多時間編碼和製作的!</p>
+        <p>希望你會喜歡~~~</p>
+        <div class="buttons">
+            <a href="message.html" class="btn">一段話</a>
+            <a href="gallery.html" class="btn">照片Gallery</a>
+        </div>
+    </div>
+</body>
+
+</html>
