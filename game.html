@@ -162,7 +162,7 @@
 <body>
     <div class="game-container">
         <h1>🎂 媽媽的生日遊戲 🎂</h1>
-        <p class="subtitle">幫媽媽捕捉禮物並避開不好的東西！</p>
+        <p class="subtitle">幫你自己捕捉禮物並避開不好的東西！</p>
 
         <div class="stats">
             <div class="stat-box score">
@@ -179,7 +179,7 @@
 
         <div class="btn-group">
             <button class="btn-start" onclick="startGame()">開始遊戲</button>
-            <button class="btn-menu" onclick="location.href='bd2026.html'">回家</button>
+            <button class="btn-menu" onclick="location.href='bd2026.html'">回主頁</button>
         </div>
     </div>
 
@@ -420,12 +420,12 @@
                 gameOver = true;
                 gameRunning = false;
                 document.getElementById('gameStatus').innerHTML = 
-                    '<div class="game-over lose">💔 遊戲結束！你失去了所有生命。</div>';
+                    '<div class="game-over lose">💔 遊戲結束！你輸了，但沒關係，我還是愛你！</div>';
             } else if (score >= 100) {
                 win = true;
                 gameRunning = false;
                 document.getElementById('gameStatus').innerHTML = 
-                    '<div class="game-over win">🎉 你贏了！媽媽太開心了！</div>';
+                    '<div class="game-over win">🎉 你贏了！我愛你！</div>';
             }
 
             if (gameRunning) {
