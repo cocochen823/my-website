@@ -144,28 +144,7 @@
             color: #27ae60;
         }
 
-        .instructions {
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-            text-align: left;
-            border-left: 4px solid #FF7043;
-        }
 
-        .instructions h3 {
-            color: #FF7043;
-            margin-bottom: 10px;
-        }
-
-        .instructions ul {
-            margin-left: 20px;
-        }
-
-        .instructions li {
-            margin: 8px 0;
-            color: #555;
-        }
 
         @media (max-width: 768px) {
             h1 {
@@ -207,18 +186,7 @@
 
         <div class="btn-group">
             <button class="btn-start" onclick="startGame()">Start Game</button>
-            <button class="btn-menu" onclick="location.href='bd.html'">Back to Home</button>
-        </div>
-
-        <div class="instructions">
-            <h3>How to Play:</h3>
-            <ul>
-                <li>🎁 Catch green gifts to earn points</li>
-                <li>❌ Avoid red bad items or lose a life</li>
-                <li>⭐ Reach 100 points to win!</li>
-                <li>❤️ You have 3 lives - don't lose them all!</li>
-                <li>Use arrow keys to move Mom left and right</li>
-            </ul>
+            <button class="btn-menu" onclick="location.href='bd2026.html'">Back to Home</button>
         </div>
     </div>
 
@@ -253,23 +221,13 @@
             'imagesbd/IMG_9683.jpg'
         ];
 
-        // Bad items - using screenshots
-        const badItemPaths = [
-            'imagesbd/Screenshot 2025-03-25 194251.png',
-            'imagesbd/Screenshot 2025-03-25 194324.png',
-            'imagesbd/Screenshot 2025-03-25 194338.png'
-        ];
+        // Bad items - emojis
+        const badItemEmojis = ['🧹', '💼', '🧽', '🍳', '🧺', '💼', '📋', '🧴'];
 
         goodItemPaths.forEach(path => {
             const img = new Image();
             img.src = path;
             images.goodItems.push(img);
-        });
-
-        badItemPaths.forEach(path => {
-            const img = new Image();
-            img.src = path;
-            images.badItems.push(img);
         });
 
         // Player (Mom)
@@ -311,18 +269,18 @@
         // FallingItem class
         class FallingItem {
             constructor() {
-                this.x = Math.random() * (GAME_WIDTH - 50);
-                this.y = -50;
-                this.width = 50;
-                this.height = 50;
+                this.x = Math.random() * (GAME_WIDTH - 80);
+                this.y = -80;
+                this.width = 80;
+                this.height = 80;
                 this.speed = 4 + Math.random() * 2;
                 this.isGood = Math.random() < 0.7; // 70% good, 30% bad
                 
-                // Select random image
+                // Select random image for good items or emoji for bad items
                 if (this.isGood) {
                     this.image = images.goodItems[Math.floor(Math.random() * images.goodItems.length)];
                 } else {
-                    this.image = images.badItems[Math.floor(Math.random() * images.badItems.length)];
+                    this.emoji = badItemEmojis[Math.floor(Math.random() * badItemEmojis.length)];
                 }
             }
 
@@ -331,23 +289,30 @@
             }
 
             draw(ctx) {
-                if (this.image && this.image.complete) {
-                    // Draw image
+                if (this.isGood && this.image && this.image.complete) {
+                    // Draw good item image
                     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
                     
                     // Add border
-                    ctx.strokeStyle = this.isGood ? '#27ae60' : '#e74c3c';
+                    ctx.strokeStyle = '#27ae60';
                     ctx.lineWidth = 2;
                     ctx.strokeRect(this.x, this.y, this.width, this.height);
-                } else {
-                    // Fallback: draw colored square with emoji
-                    ctx.fillStyle = this.isGood ? '#27ae60' : '#e74c3c';
+                } else if (this.isGood) {
+                    // Fallback for loading images: colored square
+                    ctx.fillStyle = '#27ae60';
                     ctx.fillRect(this.x, this.y, this.width, this.height);
-                    ctx.fillStyle = '#fff';
-                    ctx.font = 'bold 20px Arial';
+                } else {
+                    // Bad item: draw emoji with background
+                    ctx.fillStyle = '#fff3cd';
+                    ctx.fillRect(this.x, this.y, this.width, this.height);
+                    ctx.strokeStyle = '#ffc107';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(this.x, this.y, this.width, this.height);
+                    ctx.fillStyle = '#000';
+                    ctx.font = 'bold 50px Arial';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    ctx.fillText(this.isGood ? '🎁' : '❌', this.x + 25, this.y + 25);
+                    ctx.fillText(this.emoji, this.x + 40, this.y + 40);
                 }
             }
 
@@ -490,7 +455,7 @@
             tickCount = 0;
             
             player.x = 350;
-            player.y = 500;
+            player.y = 480;
 
             document.getElementById('gameStatus').innerHTML = '';
             document.getElementById('score').textContent = score;
