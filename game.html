@@ -157,6 +157,34 @@
             .game-container {
                 padding: 15px;
             }
+
+            .mobile-controls {
+                display: flex;
+                gap: 20px;
+                justify-content: center;
+                margin-top: 20px;
+            }
+
+            .mobile-btn {
+                padding: 20px 40px;
+                font-size: 1.5em;
+                border: none;
+                border-radius: 10px;
+                background: #FF7043;
+                color: white;
+                cursor: pointer;
+                font-weight: bold;
+                touch-action: manipulation;
+            }
+
+            .mobile-btn:active {
+                background: #D84315;
+                transform: scale(0.95);
+            }
+        }
+
+        .mobile-controls {
+            display: none;
         }
     </style>
 </head>
@@ -175,6 +203,11 @@
         </div>
 
         <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+        <div class="mobile-controls" id="mobileControls">
+            <button class="mobile-btn" id="leftBtn" onmousedown="startLeft()" onmouseup="stopLeft()" ontouchstart="startLeft()" ontouchend="stopLeft()">⬅️ 左</button>
+            <button class="mobile-btn" id="rightBtn" onmousedown="startRight()" onmouseup="stopRight()" ontouchstart="startRight()" ontouchend="stopRight()">右 ➡️</button>
+        </div>
 
         <div class="controls">
             <p id="gameStatus"></p>
@@ -265,6 +298,37 @@
                 e.preventDefault();
             }
         });
+
+        // Mobile controls
+        function startLeft() {
+            keys['ArrowLeft'] = true;
+        }
+
+        function stopLeft() {
+            keys['ArrowLeft'] = false;
+        }
+
+        function startRight() {
+            keys['ArrowRight'] = true;
+        }
+
+        function stopRight() {
+            keys['ArrowRight'] = false;
+        }
+
+        // Show mobile controls on small screens
+        function updateMobileControls() {
+            const mobileControls = document.getElementById('mobileControls');
+            if (window.innerWidth <= 768) {
+                mobileControls.style.display = 'flex';
+            } else {
+                mobileControls.style.display = 'none';
+            }
+        }
+
+        // Check on load and resize
+        window.addEventListener('load', updateMobileControls);
+        window.addEventListener('resize', updateMobileControls);
 
         // FallingItem class
         class FallingItem {
