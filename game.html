@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mom's Birthday Game 🎂</title>
+    <title>媽媽的生日遊戲 🎂</title>
     <style>
         * {
             margin: 0;
@@ -70,7 +70,7 @@
 
         #gameCanvas {
             border: 4px solid #333;
-            background-color: #fff5f8;
+            background-color: #9575CD;
             margin: 20px 0;
             display: block;
             border-radius: 8px;
@@ -144,29 +144,6 @@
             color: #27ae60;
         }
 
-        .instructions {
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-            text-align: left;
-            border-left: 4px solid #FF7043;
-        }
-
-        .instructions h3 {
-            color: #FF7043;
-            margin-bottom: 10px;
-        }
-
-        .instructions ul {
-            margin-left: 20px;
-        }
-
-        .instructions li {
-            margin: 8px 0;
-            color: #555;
-        }
-
         @media (max-width: 768px) {
             h1 {
                 font-size: 1.8em;
@@ -184,41 +161,30 @@
 </head>
 <body>
     <div class="game-container">
-        <h1>🎂 Mom's Birthday Game 🎂</h1>
-        <p class="subtitle">Help Mom catch the gifts and avoid the bad items!</p>
+        <h1>🎂 媽媽的生日遊戲 🎂</h1>
+        <p class="subtitle">幫媽媽捕捉禮物並避開不好的東西！</p>
 
         <div class="stats">
             <div class="stat-box score">
-                Score: <span id="score">0</span> / 100
+                分數: <span id="score">0</span> / 100
             </div>
             <div class="stat-box lives">
-                Lives: <span id="lives">3</span>
+                生命: <span id="lives">3</span>
             </div>
         </div>
 
         <canvas id="gameCanvas" width="800" height="600"></canvas>
 
         <div class="controls">
-            <p><strong>⬅️ Use LEFT and RIGHT arrow keys to move</strong></p>
-            <p><strong>Collect 🎁 gifts (green) to increase score</strong></p>
-            <p><strong>Avoid ❌ bad items (red)</strong></p>
+            <p><strong>⬅️ 使用左和右箭頭鍵移動</strong></p>
+            <p><strong>收集 📸 照片（閃亮的）以增加分數</strong></p>
+            <p><strong>避免 💼 工作和家務（黃色）</strong></p>
             <p id="gameStatus"></p>
         </div>
 
         <div class="btn-group">
-            <button class="btn-start" onclick="startGame()">Start Game</button>
-            <button class="btn-menu" onclick="location.href='bd.html'">Back to Home</button>
-        </div>
-
-        <div class="instructions">
-            <h3>How to Play:</h3>
-            <ul>
-                <li>🎁 Catch green gifts to earn points</li>
-                <li>❌ Avoid red bad items or lose a life</li>
-                <li>⭐ Reach 100 points to win!</li>
-                <li>❤️ You have 3 lives - don't lose them all!</li>
-                <li>Use arrow keys to move Mom left and right</li>
-            </ul>
+            <button class="btn-start" onclick="startGame()">開始遊戲</button>
+            <button class="btn-menu" onclick="location.href='bd2026.html'">回家</button>
         </div>
     </div>
 
@@ -234,12 +200,44 @@
         let gameOver = false;
         let win = false;
 
+        // Images
+        const images = {
+            player: new Image(),
+            goodItems: [],
+            badItems: []
+        };
+
+        // Load images
+        images.player.src = 'image2026/Screenshot 2026-03-25 200822.png';
+
+        // Good items (gifts) - using only specific screenshots from image2026
+        const goodItemPaths = [
+            'image2026/Screenshot 2026-03-25 202821.png',
+            'image2026/Screenshot 2026-03-25 203243.png',
+            'image2026/Screenshot 2026-03-25 203252.png',
+            'image2026/Screenshot 2026-03-25 203329.png',
+            'image2026/Screenshot 2026-03-25 203337.png',
+            'image2026/Screenshot 2026-03-25 203344.png',
+            'image2026/Screenshot 2026-03-25 203352.png',
+            'image2026/Screenshot 2026-03-25 203403.png',
+            'image2026/Screenshot 2026-03-25 203439.png'
+        ];
+
+        // Bad items - emojis
+        const badItemEmojis = ['🧹', '💼', '🧽', '🍳', '🧴', '💼', '📋', '🧴'];
+
+        goodItemPaths.forEach(path => {
+            const img = new Image();
+            img.src = path;
+            images.goodItems.push(img);
+        });
+
         // Player (Mom)
         const player = {
             x: 350,
-            y: 500,
+            y: 480,
             width: 100,
-            height: 80,
+            height: 100,
             speed: 18,
             dx: 0
         };
@@ -273,12 +271,19 @@
         // FallingItem class
         class FallingItem {
             constructor() {
-                this.x = Math.random() * (GAME_WIDTH - 40);
-                this.y = -40;
-                this.width = 40;
-                this.height = 40;
+                this.x = Math.random() * (GAME_WIDTH - 80);
+                this.y = -80;
+                this.width = 80;
+                this.height = 80;
                 this.speed = 4 + Math.random() * 2;
                 this.isGood = Math.random() < 0.7; // 70% good, 30% bad
+                
+                // Select random image for good items or emoji for bad items
+                if (this.isGood) {
+                    this.image = images.goodItems[Math.floor(Math.random() * images.goodItems.length)];
+                } else {
+                    this.emoji = badItemEmojis[Math.floor(Math.random() * badItemEmojis.length)];
+                }
             }
 
             update() {
@@ -286,24 +291,30 @@
             }
 
             draw(ctx) {
-                if (this.isGood) {
-                    // Green gift
+                if (this.isGood && this.image && this.image.complete) {
+                    // Draw good item image
+                    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+                    
+                    // Add border
+                    ctx.strokeStyle = '#27ae60';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(this.x, this.y, this.width, this.height);
+                } else if (this.isGood) {
+                    // Fallback for loading images: colored square
                     ctx.fillStyle = '#27ae60';
                     ctx.fillRect(this.x, this.y, this.width, this.height);
-                    ctx.fillStyle = '#fff';
-                    ctx.font = 'bold 24px Arial';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillText('🎁', this.x + 20, this.y + 20);
                 } else {
-                    // Red bad item
-                    ctx.fillStyle = '#e74c3c';
+                    // Bad item: draw emoji with background
+                    ctx.fillStyle = '#fff3cd';
                     ctx.fillRect(this.x, this.y, this.width, this.height);
-                    ctx.fillStyle = '#fff';
-                    ctx.font = 'bold 20px Arial';
+                    ctx.strokeStyle = '#ffc107';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(this.x, this.y, this.width, this.height);
+                    ctx.fillStyle = '#000';
+                    ctx.font = 'bold 50px Arial';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    ctx.fillText('❌', this.x + 20, this.y + 20);
+                    ctx.fillText(this.emoji, this.x + 40, this.y + 40);
                 }
             }
 
@@ -313,20 +324,25 @@
         }
 
         function drawPlayer() {
-            // Draw mom as a simple shape with emoji
-            ctx.fillStyle = '#FF7043';
-            ctx.fillRect(player.x, player.y, player.width, player.height);
-            
-            // Add emoji for mom
-            ctx.font = 'bold 50px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('👩', player.x + player.width / 2, player.y + player.height / 2);
-
-            // Draw border
-            ctx.strokeStyle = '#D84315';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(player.x, player.y, player.width, player.height);
+            // Draw actual player image
+            if (images.player && images.player.complete) {
+                ctx.drawImage(images.player, player.x, player.y, player.width, player.height);
+                // Add border
+                ctx.strokeStyle = '#FF7043';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(player.x, player.y, player.width, player.height);
+            } else {
+                // Fallback: orange square with emoji
+                ctx.fillStyle = '#FF7043';
+                ctx.fillRect(player.x, player.y, player.width, player.height);
+                ctx.font = 'bold 50px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('👩', player.x + player.width / 2, player.y + player.height / 2);
+                ctx.strokeStyle = '#D84315';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(player.x, player.y, player.width, player.height);
+            }
         }
 
         function updatePlayer() {
@@ -374,12 +390,12 @@
         }
 
         function draw() {
-            // Clear canvas
-            ctx.fillStyle = '#fff5f8';
+            // Clear canvas with purple background
+            ctx.fillStyle = '#9575CD';
             ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
-            // Draw decorations
-            ctx.fillStyle = '#f0f0f0';
+            // Draw decorations at top
+            ctx.fillStyle = '#fff';
             ctx.font = '30px Arial';
             ctx.textAlign = 'center';
             ctx.fillText('🎈 🎈 🎈 🎈 🎈', GAME_WIDTH / 2, 30);
@@ -391,12 +407,15 @@
             drawPlayer();
 
             // Draw UI on canvas
-            ctx.fillStyle = '#333';
+            ctx.fillStyle = '#fff';
             ctx.font = 'bold 20px Arial';
             ctx.textAlign = 'left';
             ctx.textBaseline = 'top';
-            ctx.fillText(`Score: ${score}`, 10, 10);
-            ctx.fillText(`Lives: ${lives}`, 10, 40);
+            ctx.shadowColor = 'rgba(0,0,0,0.5)';
+            ctx.shadowBlur = 4;
+            ctx.fillText(`分數: ${score}`, 10, 10);
+            ctx.fillText(`生命: ${lives}`, 10, 40);
+            ctx.shadowColor = 'transparent';
         }
 
         function gameLoop() {
@@ -406,12 +425,12 @@
                 gameOver = true;
                 gameRunning = false;
                 document.getElementById('gameStatus').innerHTML = 
-                    '<div class="game-over lose">💔 Game Over! You lost all your lives.</div>';
+                    '<div class="game-over lose">💔 遊戲結束！你失去了所有生命。</div>';
             } else if (score >= 100) {
                 win = true;
                 gameRunning = false;
                 document.getElementById('gameStatus').innerHTML = 
-                    '<div class="game-over win">🎉 You Won! Mom is so happy!</div>';
+                    '<div class="game-over win">🎉 你贏了！媽媽太開心了！</div>';
             }
 
             if (gameRunning) {
@@ -438,7 +457,7 @@
             tickCount = 0;
             
             player.x = 350;
-            player.y = 500;
+            player.y = 480;
 
             document.getElementById('gameStatus').innerHTML = '';
             document.getElementById('score').textContent = score;
@@ -449,13 +468,13 @@
 
         // Draw initial screen
         draw();
-        ctx.fillStyle = 'rgba(0,0,0,0.7)';
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
         ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
         ctx.fillStyle = '#fff';
         ctx.font = 'bold 40px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('Click "Start Game" to play!', GAME_WIDTH / 2, GAME_HEIGHT / 2);
+        ctx.fillText('點擊「開始遊戲」來玩！', GAME_WIDTH / 2, GAME_HEIGHT / 2);
     </script>
 </body>
 </html>
