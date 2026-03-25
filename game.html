@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mom's Birthday Game 🎂</title>
+    <title>媽媽的生日遊戲 🎂</title>
     <style>
         * {
             margin: 0;
@@ -163,30 +163,30 @@
 </head>
 <body>
     <div class="game-container">
-        <h1>🎂 Mom's Birthday Game 🎂</h1>
-        <p class="subtitle">Help Mom catch the gifts and avoid the bad items!</p>
+        <h1>🎂 媽媽的生日遊戲 🎂</h1>
+        <p class="subtitle">幫媽媽捕捉禮物並避開不好的東西！</p>
 
         <div class="stats">
             <div class="stat-box score">
-                Score: <span id="score">0</span> / 100
+                分數: <span id="score">0</span> / 100
             </div>
             <div class="stat-box lives">
-                Lives: <span id="lives">3</span>
+                生命: <span id="lives">3</span>
             </div>
         </div>
 
         <canvas id="gameCanvas" width="800" height="600"></canvas>
 
         <div class="controls">
-            <p><strong>⬅️ Use LEFT and RIGHT arrow keys to move</strong></p>
-            <p><strong>Collect 🎁 gifts (green) to increase score</strong></p>
-            <p><strong>Avoid ❌ bad items (red)</strong></p>
+            <p><strong>⬅️ 使用左和右箭頭鍵移動</strong></p>
+            <p><strong>收集 🎁 禮物（綠色）以增加分數</strong></p>
+            <p><strong>避開 ❌ 不好的東西（黃色）</strong></p>
             <p id="gameStatus"></p>
         </div>
 
         <div class="btn-group">
-            <button class="btn-start" onclick="startGame()">Start Game</button>
-            <button class="btn-menu" onclick="location.href='bd2026.html'">Back to Home</button>
+            <button class="btn-start" onclick="startGame()">開始遊戲</button>
+            <button class="btn-menu" onclick="location.href='bd2026.html'">回家</button>
         </div>
     </div>
 
@@ -411,8 +411,8 @@
             ctx.textBaseline = 'top';
             ctx.shadowColor = 'rgba(0,0,0,0.5)';
             ctx.shadowBlur = 4;
-            ctx.fillText(`Score: ${score}`, 10, 10);
-            ctx.fillText(`Lives: ${lives}`, 10, 40);
+            ctx.fillText(`分數: ${score}`, 10, 10);
+            ctx.fillText(`生命: ${lives}`, 10, 40);
             ctx.shadowColor = 'transparent';
         }
 
@@ -423,12 +423,12 @@
                 gameOver = true;
                 gameRunning = false;
                 document.getElementById('gameStatus').innerHTML = 
-                    '<div class="game-over lose">💔 Game Over! You lost all your lives.</div>';
+                    '<div class="game-over lose">💔 遊戲結束！你失去了所有生命。</div>';
             } else if (score >= 100) {
                 win = true;
                 gameRunning = false;
                 document.getElementById('gameStatus').innerHTML = 
-                    '<div class="game-over win">🎉 You Won! Mom is so happy!</div>';
+                    '<div class="game-over win">🎉 你贏了！媽媽太開心了！</div>';
             }
 
             if (gameRunning) {
@@ -472,7 +472,7 @@
         ctx.font = 'bold 40px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('Click "Start Game" to play!', GAME_WIDTH / 2, GAME_HEIGHT / 2);
+        ctx.fillText('點擊「開始遊戲」來玩！', GAME_WIDTH / 2, GAME_HEIGHT / 2);
     </script>
 </body>
 </html>
